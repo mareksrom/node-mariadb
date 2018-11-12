@@ -1073,6 +1073,16 @@ class Client : public Nan::ObjectWrap {
             new_buf[b] = buf[b];
           field_value = Nan::New<String>(new_buf, vlen).ToLocalChecked();
           delete[] new_buf;
+		}
+		else if (fields[f].type == MYSQL_TYPE_LONG || fields[f].type == MYSQL_TYPE_LONGLONG || fields[f].type == MYSQL_TYPE_SHORT || fields[f].type == MYSQL_TYPE_INT24) {
+              field_value = Nan::New<Integer>(atoi(cur_row[f]));
+		}
+		else if (fields[f].type == MYSQL_TYPE_DOUBLE || fields[f].type == MYSQL_TYPE_FLOAT || fields[f].type == MYSQL_TYPE_NEWDECIMAL) {
+              field_value = Nan::New<Number>(atof(cur_row[f]));
+		}
+		else if (fields[f].type == MYSQL_TYPE_BIT) {
+			  buf = (unsigned char*)(cur_row[f]);
+              field_value = Nan::New<Boolean>(buf[0]==1);
         } else {
           field_value =
             Nan::New<String>(cur_row[f], lengths[f]).ToLocalChecked();
@@ -1133,6 +1143,16 @@ class Client : public Nan::ObjectWrap {
               new_buf[b] = buf[b];
             field_value = Nan::New<String>(new_buf, vlen).ToLocalChecked();
             delete[] new_buf;
+		  }
+		else if (fields[f].type == MYSQL_TYPE_LONG || fields[f].type == MYSQL_TYPE_LONGLONG || fields[f].type == MYSQL_TYPE_SHORT || fields[f].type == MYSQL_TYPE_INT24) {
+              field_value = Nan::New<Integer>(atoi(dbrow[f]));
+		  }
+		  else if (fields[f].type == MYSQL_TYPE_DOUBLE || fields[f].type == MYSQL_TYPE_FLOAT || fields[f].type == MYSQL_TYPE_NEWDECIMAL) {
+              field_value = Nan::New<Number>(atof(dbrow[f]));
+		  }
+		  else if (fields[f].type == MYSQL_TYPE_BIT) {
+			  buf = (unsigned char*)(dbrow[f]);
+              field_value = Nan::New<Boolean>(buf[0]==1);
           } else {
             field_value =
               Nan::New<String>(dbrow[f], lengths[f]).ToLocalChecked();
